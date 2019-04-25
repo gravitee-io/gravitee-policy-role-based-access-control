@@ -1,0 +1,84 @@
+= API Key Policy
+
+ifdef::env-github[]
+image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-apikey/master["Build status", link="https://ci.gravitee.io/job/gravitee-io/job/gravitee-policy-apikey/"]
+image:https://badges.gitter.im/Join Chat.svg["Gitter", link="https://gitter.im/gravitee-io/gravitee-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
+endif::[]
+
+== Phase
+
+[cols="2*", options="header"]
+|===
+^|onRequest
+^|onResponse
+
+^.^| X
+^.^|
+
+|===
+
+== Description
+
+API Key policy lets you enforce verification of API keys during request processing, letting only apps with approved API
+keys access your APIs.
+
+This policy ensures that API keys are valid, have not been revoked or expired, and are approved to consume the specific
+resources associated with your API.
+
+== Configuration
+
+=== Policy level
+You can configure the policy with the following options :
+
+|===
+|Property |Required |Description |Type |Default
+
+.^|propagateApiKey
+^.^|-
+|Propagate API Key to upstream API
+^.^|boolean
+^.^|_false_
+
+|===
+
+
+[source, json]
+.Configuration
+----
+"api-key": {
+  "propagateApiKey": false
+}
+----
+
+=== Gateway level
+It is also possible to customize the `X-Gravitee-Api-Key` header or `api-key` query parameter.
+This can be done from gateway configuration file (`gravitee.yml`):
+
+[source, yaml]
+.Configuration
+----
+policy:
+  api-key:
+    header: My-Custom-Api-Key
+    param: custom-api-key
+----
+
+
+== Errors
+If you're looking to override the default response provided by the policy, you can do it
+thanks to the response templates feature. These templates must be define at the API level (see `Response Templates`
+from the `Proxy` menu).
+
+Here are the error keys send by this policy:
+
+[cols="2*", options="header"]
+|===
+^|Key
+^|Parameters
+
+.^|API_KEY_MISSING
+^.^|-
+.^|API_KEY_INVALID_KEY
+^.^|-
+
+|===
