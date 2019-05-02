@@ -1,7 +1,7 @@
-= API Key Policy
+= Role-based access control Policy
 
 ifdef::env-github[]
-image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-apikey/master["Build status", link="https://ci.gravitee.io/job/gravitee-io/job/gravitee-policy-apikey/"]
+image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-role-based-access-control/master["Build status", link="https://ci.gravitee.io/job/gravitee-io/job/gravitee-policy-role-based-access-control/"]
 image:https://badges.gitter.im/Join Chat.svg["Gitter", link="https://gitter.im/gravitee-io/gravitee-io?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge"]
 endif::[]
 
@@ -19,50 +19,59 @@ endif::[]
 
 == Description
 
-API Key policy lets you enforce verification of API keys during request processing, letting only apps with approved API
-keys access your APIs.
+The Role-Based Access Control policy (RBAC policy) checks access to the resource by providing required roles to access it.
 
-This policy ensures that API keys are valid, have not been revoked or expired, and are approved to consume the specific
-resources associated with your API.
+The policy can be configured to allow only requests which have roles exactly matching configured roles (strict mode).
+The other option is to ensure that tje incoming request contains at least one role matching configured roles.
 
 == Configuration
 
-=== Policy level
-You can configure the policy with the following options :
-
 |===
-|Property |Required |Description |Type |Default
+|Property |Required |Description |Type| Default
 
-.^|propagateApiKey
-^.^|-
-|Propagate API Key to upstream API
+.^|roles
+^.^|X
+|The list of required roles.
+^.^|Array of string
+|
+
+.^|strict
+^.^|X
+|When access token is validated, the token endpoint payload is saved under the ```oauth.payload``` context attribute.
 ^.^|boolean
-^.^|_false_
+^.^|true
 
 |===
-
 
 [source, json]
-.Configuration
+.RBAC Policy example:
 ----
-"api-key": {
-  "propagateApiKey": false
+{
+  "rbac": {
+    "roles": ["read", "write", "admin"],
+    "strict": true
+  }
 }
 ----
 
-=== Gateway level
-It is also possible to customize the `X-Gravitee-Api-Key` header or `api-key` query parameter.
-This can be done from gateway configuration file (`gravitee.yml`):
+== Http Status Code
 
-[source, yaml]
-.Configuration
-----
-policy:
-  api-key:
-    header: My-Custom-Api-Key
-    param: custom-api-key
-----
+|===
+|Code |Message
 
+.^| ```400```
+| In case of:
+
+* The roles associated to the request are not valid.
+
+.^| ```403```
+| In case of:
+
+* No role associated to the current request
+
+* Role(s) associated to the request does not match required role(s).
+
+|===
 
 == Errors
 If you're looking to override the default response provided by the policy, you can do it
@@ -76,9 +85,11 @@ Here are the error keys send by this policy:
 ^|Key
 ^|Parameters
 
-.^|API_KEY_MISSING
+.^|RBAC_NO_USER_ROLE (403)
 ^.^|-
-.^|API_KEY_INVALID_KEY
+.^|RBAC_INVALID_USER_ROLES (400)
+^.^|-
+.^|RBAC_FORBIDDEN (403)
 ^.^|-
 
 |===
