@@ -1,0 +1,25 @@
+{
+  "type" : "object",
+  "id" : "urn:jsonschema:io:gravitee:policy:rbac:configuration:RoleBasedAccessControlPolicyConfiguration",
+  "properties" : {
+    "roles": {
+      "type" : "array",
+      "title": "Required roles",
+      "description": "List of required roles to access the resource.",
+      "items" : {
+        "type" : "string",
+        "title": "Role"
+      }
+    },
+    "strict" : {
+      "title": "Strict mode",
+      "description": "Check roles with exactly those configured",
+      "type" : "boolean",
+      "default": true
+    }
+  },
+  "required": [
+    "roles",
+    "strict"
+  ]
+}
