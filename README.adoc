@@ -22,7 +22,9 @@ endif::[]
 The Role-Based Access Control policy (RBAC policy) checks access to the resource by providing required roles to access it.
 
 The policy can be configured to allow only requests which have roles exactly matching configured roles (strict mode).
-The other option is to ensure that tje incoming request contains at least one role matching configured roles.
+The other option is to ensure that the incoming request contains at least one role matching configured roles.
+
+The roles are checked against the request attributes `user.roles`.
 
 == Configuration
 
@@ -37,7 +39,7 @@ The other option is to ensure that tje incoming request contains at least one ro
 
 .^|strict
 ^.^|X
-|When access token is validated, the token endpoint payload is saved under the ```oauth.payload``` context attribute.
+|Validation mode. Strict or not (must or should).
 ^.^|boolean
 ^.^|true
 
