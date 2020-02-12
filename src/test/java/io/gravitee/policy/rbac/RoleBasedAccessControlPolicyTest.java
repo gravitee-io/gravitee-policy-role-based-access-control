@@ -142,6 +142,20 @@ public class RoleBasedAccessControlPolicyTest {
     }
 
     @Test
+    public void shouldFail_mustHaveRequiredScopes2() {
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+
+        when(mockExecutionContext.getAttribute(ExecutionContext.ATTR_USER_ROLES)).thenReturn(Arrays.asList("read", "write","admin"));
+        when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write")));
+        when(policyConfiguration.isStrict()).thenReturn(true);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).doNext(mockRequest, mockResponse);
+    }
+
+    @Test
     public void shouldFail_shouldHaveRequiredScopes() {
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
 

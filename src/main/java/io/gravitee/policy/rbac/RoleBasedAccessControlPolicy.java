@@ -96,7 +96,7 @@ public class RoleBasedAccessControlPolicy {
         }
 
         if (configuration.isStrict()) {
-            return userRoles.containsAll(configuration.getRoles()) && configuration.getRoles().containsAll(userRoles);
+            return userRoles.containsAll(configuration.getRoles());
         } else {
             return userRoles.stream().anyMatch(configuration.getRoles()::contains);
         }
