@@ -24,7 +24,7 @@ The Role-Based Access Control policy (RBAC policy) checks access to the resource
 The policy can be configured to allow only requests which have roles exactly matching configured roles (strict mode).
 The other option is to ensure that the incoming request contains at least one role matching configured roles.
 
-The roles are checked against the request attributes `user.roles`.
+The roles are checked against the request attributes `gravitee.attribute.user.roles`.
 
 == Configuration
 
