@@ -1,4 +1,4 @@
-= Role-based access control Policy
+= Role-based access control policy
 
 ifdef::env-github[]
 image:https://ci.gravitee.io/buildStatus/icon?job=gravitee-io/gravitee-policy-role-based-access-control/master["Build status", link="https://ci.gravitee.io/job/gravitee-io/job/gravitee-policy-role-based-access-control/"]
@@ -19,12 +19,15 @@ endif::[]
 
 == Description
 
-The Role-Based Access Control policy (RBAC policy) checks access to the resource by providing required roles to access it.
+You can use the `role-based-access-control` policy (RBAC policy) to control access to a resource by specifying the required roles to access it.
 
-The policy can be configured to allow only requests which have roles exactly matching configured roles (strict mode).
-The other option is to ensure that the incoming request contains at least one role matching configured roles.
+The policy can be configured to either:
 
-The roles are checked against the request attributes `gravitee.attribute.user.roles`.
+* allow only incoming requests with roles exactly matching the configured roles (strict mode)
+
+* allow incoming requests with at least one role matching the configured roles
+
+The roles are checked against request attribute `gravitee.attribute.user.roles`.
 
 == Configuration
 
@@ -33,20 +36,22 @@ The roles are checked against the request attributes `gravitee.attribute.user.ro
 
 .^|roles
 ^.^|X
-|The list of required roles.
-^.^|Array of string
+|The list of required roles
+^.^|Array of strings
 |
 
 .^|strict
 ^.^|X
-|Validation mode. Strict or not (must or should).
+|Validation mode -- strict or not (must or should)
 ^.^|boolean
 ^.^|true
 
 |===
 
+
+=== Configuration example
+
 [source, json]
-.RBAC Policy example:
 ----
 {
   "rbac": {
@@ -56,31 +61,35 @@ The roles are checked against the request attributes `gravitee.attribute.user.ro
 }
 ----
 
-== Http Status Code
+== Errors
+
+=== HTTP status codes
 
 |===
 |Code |Message
 
 .^| ```400```
-| In case of:
+| Applies if:
 
-* The roles associated to the request are not valid.
+* The roles associated with the request are not valid
 
 .^| ```403```
-| In case of:
+| Applies if:
 
-* No role associated to the current request
+* No roles are associated with the current request
 
-* Role(s) associated to the request does not match required role(s).
+* Role(s) associated with the request do not match required role(s)
 
 |===
 
-== Errors
-If you're looking to override the default response provided by the policy, you can do it
-thanks to the response templates feature. These templates must be define at the API level (see `Response Templates`
-from the `Proxy` menu).
+=== Default response override
 
-Here are the error keys send by this policy:
+You can use the response template feature to override the default responses provided by the policy. These templates must be defined at the API level (see the API Console *Response Templates*
+option in the API *Proxy* menu).
+
+=== Error keys
+
+The error keys sent by this policy are as follows:
 
 [cols="2*", options="header"]
 |===
