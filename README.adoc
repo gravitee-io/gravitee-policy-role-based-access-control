@@ -29,6 +29,10 @@ The policy can be configured to either:
 
 The roles are checked against request attribute `gravitee.attribute.user.roles`.
 
+=== Policy identifier
+
+You can enable or disable the policy with policy identifier `rbac`.
+
 == Configuration
 
 |===
