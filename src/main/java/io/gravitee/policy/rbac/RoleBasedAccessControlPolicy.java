@@ -25,6 +25,7 @@ import io.gravitee.policy.api.annotations.OnRequest;
 import io.gravitee.policy.rbac.configuration.RoleBasedAccessControlPolicyConfiguration;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -65,8 +66,9 @@ public class RoleBasedAccessControlPolicy {
                             HttpStatusCode.FORBIDDEN_403,
                             "There is no user role associated to the current request."));
         } else if (configuration.hasRoles()) {
-            if (userRolesAttribute instanceof List) {
-                if (hasRequiredRoles((List) userRolesAttribute)) {
+            if (userRolesAttribute instanceof List || userRolesAttribute instanceof String[]) {
+                if ((userRolesAttribute instanceof List && hasRequiredRoles((List)userRolesAttribute))
+                || (userRolesAttribute instanceof String[] && hasRequiredRoles((String[])userRolesAttribute))) {
                     policyChain.doNext(request, response);
                 } else {
                     // The user roles do not contain one of the expected role
@@ -99,6 +101,37 @@ public class RoleBasedAccessControlPolicy {
             return userRoles.containsAll(configuration.getRoles());
         } else {
             return userRoles.stream().anyMatch(configuration.getRoles()::contains);
+        }
+    }
+
+    private boolean hasRequiredRoles(final String[] userRoles) {
+        if (userRoles == null || userRoles.length == 0) {
+            return false;
+        }
+
+        if (configuration.isStrict()) {
+            if (userRoles.length < configuration.getRoles().size()) {
+                return false;
+            }
+            for (String requiredRole : configuration.getRoles()) {
+                boolean found = false;
+                for (int i = 0; !found && i < userRoles.length; i++) {
+                    found = requiredRole.equals(userRoles[i]);
+                }
+                if (!found) {
+                    return false;
+                }
+            }
+            return true;
+        } else {
+            for (Iterator<String> it = configuration.getRoles().iterator(); it.hasNext();) {
+                for (String userRole : userRoles) {
+                    if (it.next().equals(userRole)) {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }
