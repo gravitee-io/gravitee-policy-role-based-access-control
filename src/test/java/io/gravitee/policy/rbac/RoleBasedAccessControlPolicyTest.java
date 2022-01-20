@@ -15,6 +15,8 @@
  */
 package io.gravitee.policy.rbac;
 
+import static org.mockito.Mockito.*;
+
 import io.gravitee.common.http.HttpStatusCode;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
@@ -22,16 +24,13 @@ import io.gravitee.gateway.api.Response;
 import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.rbac.configuration.RoleBasedAccessControlPolicyConfiguration;
+import java.util.Arrays;
+import java.util.HashSet;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
-
-import java.util.Arrays;
-import java.util.HashSet;
-
-import static org.mockito.Mockito.*;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
@@ -63,14 +62,20 @@ public class RoleBasedAccessControlPolicyTest {
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain).failWith(argThat(new ArgumentMatcher<PolicyResult>() {
-            @Override
-            public boolean matches(PolicyResult result) {
-                return
-                        result.statusCode() == HttpStatusCode.FORBIDDEN_403
-                        && RoleBasedAccessControlPolicy.RBAC_NO_USER_ROLE.equals(result.key());
-            }
-        }));
+        verify(mockPolicychain)
+            .failWith(
+                argThat(
+                    new ArgumentMatcher<PolicyResult>() {
+                        @Override
+                        public boolean matches(PolicyResult result) {
+                            return (
+                                result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
+                                RoleBasedAccessControlPolicy.RBAC_NO_USER_ROLE.equals(result.key())
+                            );
+                        }
+                    }
+                )
+            );
     }
 
     @Test
@@ -82,14 +87,20 @@ public class RoleBasedAccessControlPolicyTest {
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain).failWith(argThat(new ArgumentMatcher<PolicyResult>() {
-            @Override
-            public boolean matches(PolicyResult result) {
-                return
-                        result.statusCode() == HttpStatusCode.BAD_REQUEST_400
-                                && RoleBasedAccessControlPolicy.RBAC_INVALID_USER_ROLES.equals(result.key());
-            }
-        }));
+        verify(mockPolicychain)
+            .failWith(
+                argThat(
+                    new ArgumentMatcher<PolicyResult>() {
+                        @Override
+                        public boolean matches(PolicyResult result) {
+                            return (
+                                result.statusCode() == HttpStatusCode.BAD_REQUEST_400 &&
+                                RoleBasedAccessControlPolicy.RBAC_INVALID_USER_ROLES.equals(result.key())
+                            );
+                        }
+                    }
+                )
+            );
     }
 
     @Test
@@ -131,21 +142,27 @@ public class RoleBasedAccessControlPolicyTest {
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain).failWith(argThat(new ArgumentMatcher<PolicyResult>() {
-            @Override
-            public boolean matches(PolicyResult result) {
-                return
-                        result.statusCode() == HttpStatusCode.FORBIDDEN_403
-                                && RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key());
-            }
-        }));
+        verify(mockPolicychain)
+            .failWith(
+                argThat(
+                    new ArgumentMatcher<PolicyResult>() {
+                        @Override
+                        public boolean matches(PolicyResult result) {
+                            return (
+                                result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
+                                RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key())
+                            );
+                        }
+                    }
+                )
+            );
     }
 
     @Test
     public void shouldFail_mustHaveRequiredScopes2() {
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
 
-        when(mockExecutionContext.getAttribute(ExecutionContext.ATTR_USER_ROLES)).thenReturn(Arrays.asList("read", "write","admin"));
+        when(mockExecutionContext.getAttribute(ExecutionContext.ATTR_USER_ROLES)).thenReturn(Arrays.asList("read", "write", "admin"));
         when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write")));
         when(policyConfiguration.isStrict()).thenReturn(true);
         when(policyConfiguration.hasRoles()).thenReturn(true);
@@ -166,13 +183,19 @@ public class RoleBasedAccessControlPolicyTest {
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain).failWith(argThat(new ArgumentMatcher<PolicyResult>() {
-            @Override
-            public boolean matches(PolicyResult result) {
-                return
-                        result.statusCode() == HttpStatusCode.FORBIDDEN_403
-                                && RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key());
-            }
-        }));
+        verify(mockPolicychain)
+            .failWith(
+                argThat(
+                    new ArgumentMatcher<PolicyResult>() {
+                        @Override
+                        public boolean matches(PolicyResult result) {
+                            return (
+                                result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
+                                RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key())
+                            );
+                        }
+                    }
+                )
+            );
     }
 }

@@ -16,7 +16,6 @@
 package io.gravitee.policy.rbac.configuration;
 
 import io.gravitee.policy.api.PolicyConfiguration;
-
 import java.util.Set;
 
 /**
