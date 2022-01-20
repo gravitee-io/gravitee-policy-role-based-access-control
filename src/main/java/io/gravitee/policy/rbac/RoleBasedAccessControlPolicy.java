@@ -23,7 +23,6 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.api.annotations.OnRequest;
 import io.gravitee.policy.rbac.configuration.RoleBasedAccessControlPolicyConfiguration;
-
 import java.util.Collection;
 import java.util.List;
 
@@ -60,10 +59,12 @@ public class RoleBasedAccessControlPolicy {
         if (userRolesAttribute == null) {
             // No role for the current HTTP request
             policyChain.failWith(
-                    PolicyResult.failure(
-                            RBAC_NO_USER_ROLE,
-                            HttpStatusCode.FORBIDDEN_403,
-                            "There is no user role associated to the current request."));
+                PolicyResult.failure(
+                    RBAC_NO_USER_ROLE,
+                    HttpStatusCode.FORBIDDEN_403,
+                    "There is no user role associated to the current request."
+                )
+            );
         } else if (configuration.hasRoles()) {
             if (userRolesAttribute instanceof List) {
                 if (hasRequiredRoles((List) userRolesAttribute)) {
@@ -71,18 +72,14 @@ public class RoleBasedAccessControlPolicy {
                 } else {
                     // The user roles do not contain one of the expected role
                     policyChain.failWith(
-                            PolicyResult.failure(
-                                    RBAC_FORBIDDEN,
-                                    HttpStatusCode.FORBIDDEN_403,
-                                    "User is not allowed to access this route."));
+                        PolicyResult.failure(RBAC_FORBIDDEN, HttpStatusCode.FORBIDDEN_403, "User is not allowed to access this route.")
+                    );
                 }
             } else {
                 // The user roles structure is not the one expected
                 policyChain.failWith(
-                        PolicyResult.failure(
-                                RBAC_INVALID_USER_ROLES,
-                                HttpStatusCode.BAD_REQUEST_400,
-                                "User roles are not valid."));
+                    PolicyResult.failure(RBAC_INVALID_USER_ROLES, HttpStatusCode.BAD_REQUEST_400, "User roles are not valid.")
+                );
             }
         } else {
             // No required role defined, continue request processing
