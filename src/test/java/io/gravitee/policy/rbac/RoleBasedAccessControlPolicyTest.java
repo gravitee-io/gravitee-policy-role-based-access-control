@@ -17,7 +17,9 @@ package io.gravitee.policy.rbac;
 
 import static org.mockito.Mockito.*;
 
+import io.gravitee.common.http.HttpHeaders;
 import io.gravitee.common.http.HttpStatusCode;
+import io.gravitee.el.TemplateEngine;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
 import io.gravitee.gateway.api.Response;
@@ -26,11 +28,13 @@ import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.rbac.configuration.RoleBasedAccessControlPolicyConfiguration;
 import java.util.Arrays;
 import java.util.HashSet;
+import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.ArgumentMatcher;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
+import org.springframework.core.env.Environment;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
@@ -54,11 +58,28 @@ public class RoleBasedAccessControlPolicyTest {
     @Mock
     private RoleBasedAccessControlPolicyConfiguration policyConfiguration;
 
+    @Mock
+    private Environment environment;
+
+    @Before
+    public void init() {
+        when(mockExecutionContext.getComponent(Environment.class)).thenReturn(environment);
+        when(mockExecutionContext.request()).thenReturn(mockRequest);
+        when(mockExecutionContext.response()).thenReturn(mockResponse);
+    }
+
     @Test
     public void shouldFail_noUserRole() {
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
 
         when(mockExecutionContext.getAttribute(ExecutionContext.ATTR_USER_ROLES)).thenReturn(null);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -84,6 +105,13 @@ public class RoleBasedAccessControlPolicyTest {
 
         when(mockExecutionContext.getAttribute(ExecutionContext.ATTR_USER_ROLES)).thenReturn(new Object());
         when(policyConfiguration.hasRoles()).thenReturn(true);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -111,6 +139,13 @@ public class RoleBasedAccessControlPolicyTest {
         when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write", "admin")));
         when(policyConfiguration.isStrict()).thenReturn(true);
         when(policyConfiguration.hasRoles()).thenReturn(true);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -125,6 +160,13 @@ public class RoleBasedAccessControlPolicyTest {
         when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write", "admin")));
         when(policyConfiguration.isStrict()).thenReturn(false);
         when(policyConfiguration.hasRoles()).thenReturn(true);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -139,6 +181,13 @@ public class RoleBasedAccessControlPolicyTest {
         when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write", "admin")));
         when(policyConfiguration.isStrict()).thenReturn(true);
         when(policyConfiguration.hasRoles()).thenReturn(true);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -166,6 +215,13 @@ public class RoleBasedAccessControlPolicyTest {
         when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write")));
         when(policyConfiguration.isStrict()).thenReturn(true);
         when(policyConfiguration.hasRoles()).thenReturn(true);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -180,6 +236,13 @@ public class RoleBasedAccessControlPolicyTest {
         when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("read", "write", "admin")));
         when(policyConfiguration.isStrict()).thenReturn(false);
         when(policyConfiguration.hasRoles()).thenReturn(true);
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -197,5 +260,132 @@ public class RoleBasedAccessControlPolicyTest {
                     }
                 )
             );
+    }
+
+    private static final String GATEWAY_CONTEXT_ATTRIBUTE_ROLES = "gateway.roles";
+
+    @Test
+    public void testOnRequestHasRole_customRoleAttribute() throws Exception {
+        when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("testrole", "testrole2")));
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn("[\"testrole\", \"testrole2\"]");
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).doNext(mockRequest, mockResponse);
+    }
+
+    @Test
+    public void testOnRequestHasRole_stringRole_customRoleAttribute() throws Exception {
+        when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("testrole", "testrole2")));
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn("testrole testrole2");
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).doNext(mockRequest, mockResponse);
+    }
+
+    @Test
+    public void testOnRequestHasRole_stringRoleWithSpaces_customRoleAttribute() throws Exception {
+        when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("testrole", "testrole2")));
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn("testrole,  testrole2");
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).doNext(mockRequest, mockResponse);
+    }
+
+    @Test
+    public void testOnRequestNoRole_customRoleAttribute() throws Exception {
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn(null);
+        when(environment.getProperty(eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY), anyString()))
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).failWith(any(PolicyResult.class));
+    }
+
+    @Test
+    public void testOnRequestEmptyRole_customRoleAttribute() throws Exception {
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn("[]");
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).failWith(any(PolicyResult.class));
+    }
+
+    @Test
+    public void testOnRequestHasNoMatchRole_customRoleAttribute() throws Exception {
+        when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("testrole", "testrole2")));
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn("[\"testrole1\", \"testrole3\"]");
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).failWith(any(PolicyResult.class));
+    }
+
+    @Test
+    public void testOnRequestHasMatchRole_customRoleAttribute() throws Exception {
+        when(policyConfiguration.getRoles()).thenReturn(new HashSet<>(Arrays.asList("testrole", "testrole2")));
+        when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn("[\"testrole\", \"testrole3\"]");
+        when(
+            environment.getProperty(
+                eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
+                eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
+            )
+        )
+            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(policyConfiguration.hasRoles()).thenReturn(true);
+
+        RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
+        policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
+
+        verify(mockPolicychain).doNext(mockRequest, mockResponse);
     }
 }
