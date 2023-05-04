@@ -15,6 +15,7 @@
  */
 package io.gravitee.policy.rbac;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import io.gravitee.common.http.HttpStatusCode;
 import io.gravitee.gateway.api.ExecutionContext;
 import io.gravitee.gateway.api.Request;
@@ -23,14 +24,20 @@ import io.gravitee.policy.api.PolicyChain;
 import io.gravitee.policy.api.PolicyResult;
 import io.gravitee.policy.api.annotations.OnRequest;
 import io.gravitee.policy.rbac.configuration.RoleBasedAccessControlPolicyConfiguration;
-import java.util.Collection;
-import java.util.List;
+import java.io.IOException;
+import java.util.*;
+import java.util.stream.Collectors;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 
 /**
  * @author David BRASSELY (david.brassely at graviteesource.com)
  * @author GraviteeSource Team
  */
 public class RoleBasedAccessControlPolicy {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RoleBasedAccessControlPolicy.class);
 
     /**
      * The associated configuration to this Role-Based-Access-Control Policy
@@ -43,6 +50,13 @@ public class RoleBasedAccessControlPolicy {
 
     static final String RBAC_FORBIDDEN = "RBAC_FORBIDDEN";
 
+    private static final ObjectMapper MAPPER = new ObjectMapper();
+
+    private String userRolesAttribute;
+
+    static final String RBAC_USER_ROLES_ATTRIBUTE_KEY = "policy.rbac.attributes.roles";
+    static final String DEFAULT_RBAC_USER_ROLES_ATTRIBUTE = ExecutionContext.ATTR_USER_ROLES;
+
     /**
      * Create a new Role-Based-Access-Control Policy instance based on its associated configuration
      *
@@ -54,7 +68,7 @@ public class RoleBasedAccessControlPolicy {
 
     @OnRequest
     public void onRequest(Request request, Response response, ExecutionContext context, PolicyChain policyChain) {
-        Object userRolesAttribute = context.getAttribute(ExecutionContext.ATTR_USER_ROLES);
+        Object userRolesAttribute = context.getAttribute(getRolesAttribute(context));
 
         if (userRolesAttribute == null) {
             // No role for the current HTTP request
@@ -67,14 +81,10 @@ public class RoleBasedAccessControlPolicy {
             );
         } else if (configuration.hasRoles()) {
             if (userRolesAttribute instanceof List) {
-                if (hasRequiredRoles((List) userRolesAttribute)) {
-                    policyChain.doNext(request, response);
-                } else {
-                    // The user roles do not contain one of the expected role
-                    policyChain.failWith(
-                        PolicyResult.failure(RBAC_FORBIDDEN, HttpStatusCode.FORBIDDEN_403, "User is not allowed to access this route.")
-                    );
-                }
+                processRoles((List) userRolesAttribute, policyChain, context);
+            } else if (userRolesAttribute instanceof String) {
+                Set<String> roles = parseString((String) userRolesAttribute);
+                processRoles(roles, policyChain, context);
             } else {
                 // The user roles structure is not the one expected
                 policyChain.failWith(
@@ -84,6 +94,28 @@ public class RoleBasedAccessControlPolicy {
         } else {
             // No required role defined, continue request processing
             policyChain.doNext(request, response);
+        }
+    }
+
+    private void processRoles(final Collection<String> userRoles, PolicyChain policyChain, ExecutionContext context) {
+        if (hasRequiredRoles(userRoles)) {
+            policyChain.doNext(context.request(), context.response());
+        } else {
+            // The user roles do not contain one of the expected role
+            policyChain.failWith(
+                PolicyResult.failure(RBAC_FORBIDDEN, HttpStatusCode.FORBIDDEN_403, "User is not allowed to access this route.")
+            );
+        }
+    }
+
+    private Set<String> parseString(String rolesStr) {
+        // Two cases
+        // 2_ json format
+        // 1_ array of string (separated by a space)
+        try {
+            return MAPPER.readValue(rolesStr, Set.class);
+        } catch (IOException e) {
+            return Arrays.stream(rolesStr.split("\\s+|,\\s*")).collect(Collectors.toSet());
         }
     }
 
@@ -97,5 +129,14 @@ public class RoleBasedAccessControlPolicy {
         } else {
             return userRoles.stream().anyMatch(configuration.getRoles()::contains);
         }
+    }
+
+    private String getRolesAttribute(ExecutionContext context) {
+        if (userRolesAttribute == null) {
+            Environment environment = context.getComponent(Environment.class);
+            userRolesAttribute = environment.getProperty(RBAC_USER_ROLES_ATTRIBUTE_KEY, DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        }
+
+        return userRolesAttribute;
     }
 }

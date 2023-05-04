@@ -70,6 +70,17 @@ The roles are checked against request attribute `gravitee.attribute.user.roles`.
 }
 ----
 
+==== Gateway configuration (gravitee.yml)
+[source, yaml]
+----
+  policy:
+    rbac:
+      attributes:
+        roles: gateway.roles
+----
+
+The `policy.rbac.attributes.roles` allow to configure the context attribute from which the gateway would extract the user's roles.
+
 == Errors
 
 === HTTP status codes
