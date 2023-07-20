@@ -31,6 +31,13 @@ The policy can be configured to either:
 
 The roles are checked against request attribute `gravitee.attribute.user.roles`.
 
+== Compatibility with APIM
+
+|===
+| Plugin version | APIM version
+| 1.x            | All supported versions
+|===
+
 == Configuration
 
 |===
