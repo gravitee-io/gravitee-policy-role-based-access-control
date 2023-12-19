@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.2.1...1.3.0) (2023-12-19)
+
+
+### Features
+
+* enable policy on REQUEST phase for message APIs ([ec4f566](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/commit/ec4f566cdc6ff6b7d9ac7366c3d6a6eec341e996)), closes [gravitee-io/issues#9430](https://github.com/gravitee-io/issues/issues/9430)
+
 ## [1.2.1](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.2.0...1.2.1) (2023-07-20)
 
 
