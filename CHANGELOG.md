@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.3.0...1.4.0) (2024-01-26)
+
+
+### Features
+
+* **rbac:** Allow to configure the attribute from which to extract user's roles ([1d939f7](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/commit/1d939f7c3561c813a4a0dd5a94bd7b50e44d5e66))
+
 # [1.3.0](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.2.1...1.3.0) (2023-12-19)
 
 
