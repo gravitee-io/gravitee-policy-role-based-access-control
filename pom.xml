@@ -34,25 +34,20 @@
     </parent>
 
     <properties>
-        <gravitee-bom.version>5.0.0</gravitee-bom.version>
-        <gravitee-gateway-api.version>3.9.1</gravitee-gateway-api.version>
-        <gravitee-policy-api.version>1.11.0</gravitee-policy-api.version>
+        <gravitee-apim-bom.version>4.6.0</gravitee-apim-bom.version>
 
-        <json-schema-generator-maven-plugin.version>1.1.0</json-schema-generator-maven-plugin.version>
-        <json-schema-generator-maven-plugin.outputDirectory>${project.build.directory}/schemas</json-schema-generator-maven-plugin.outputDirectory>
-
-        <maven-assembly-plugin.version>2.5.5</maven-assembly-plugin.version>
         <!-- Property used by the publication job in CI-->
         <publish-folder-path>graviteeio-apim/plugins/policies</publish-folder-path>
+        <properties-maven-plugin.version>1.2.1</properties-maven-plugin.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
             <!-- Import bom to properly inherit all dependencies -->
             <dependency>
-                <groupId>io.gravitee</groupId>
-                <artifactId>gravitee-bom</artifactId>
-                <version>${gravitee-bom.version}</version>
+                <groupId>io.gravitee.apim</groupId>
+                <artifactId>gravitee-apim-bom</artifactId>
+                <version>${gravitee-apim-bom.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
@@ -64,14 +59,12 @@
         <dependency>
             <groupId>io.gravitee.gateway</groupId>
             <artifactId>gravitee-gateway-api</artifactId>
-            <version>${gravitee-gateway-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>io.gravitee.policy</groupId>
             <artifactId>gravitee-policy-api</artifactId>
-            <version>${gravitee-policy-api.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -120,7 +113,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>properties-maven-plugin</artifactId>
-                <version>1.2.1</version>
+                <version>${properties-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <phase>initialize</phase>
@@ -139,7 +132,6 @@
             </plugin>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>${maven-assembly-plugin.version}</version>
                 <configuration>
                     <appendAssemblyId>false</appendAssemblyId>
                     <descriptors>
