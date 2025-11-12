@@ -1,26 +1,23 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "additionalProperties": false,
-  "properties" : {
-    "roles": {
-      "type" : "array",
-      "title": "Required roles",
-      "description": "List of required roles to access the resource.",
-      "items" : {
-        "type" : "string",
-        "title": "Role"
-      }
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "roles": {
+            "type": "array",
+            "title": "Required roles",
+            "description": "List of required roles to access the resource.",
+            "items": {
+                "type": "string",
+                "title": "Role"
+            }
+        },
+        "strict": {
+            "title": "Strict mode",
+            "description": "Check roles with exactly those configured.",
+            "type": "boolean",
+            "default": true
+        }
     },
-    "strict" : {
-      "title": "Strict mode",
-      "description": "Check roles with exactly those configured.",
-      "type" : "boolean",
-      "default": true
-    }
-  },
-  "required": [
-    "roles",
-    "strict"
-  ]
+    "required": ["roles", "strict"]
 }
