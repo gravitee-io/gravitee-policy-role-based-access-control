@@ -1,11 +1,11 @@
-/**
- * Copyright (C) 2015 The Gravitee team (http://gravitee.io)
+/*
+ * Copyright © 2015 The Gravitee team (http://gravitee.io)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *         http://www.apache.org/licenses/LICENSE-2.0
+ *     http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -78,25 +78,23 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain)
-            .failWith(
-                argThat(
-                    new ArgumentMatcher<PolicyResult>() {
-                        @Override
-                        public boolean matches(PolicyResult result) {
-                            return (
-                                result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
-                                RoleBasedAccessControlPolicy.RBAC_NO_USER_ROLE.equals(result.key())
-                            );
-                        }
+        verify(mockPolicychain).failWith(
+            argThat(
+                new ArgumentMatcher<PolicyResult>() {
+                    @Override
+                    public boolean matches(PolicyResult result) {
+                        return (
+                            result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
+                            RoleBasedAccessControlPolicy.RBAC_NO_USER_ROLE.equals(result.key())
+                        );
                     }
-                )
-            );
+                }
+            )
+        );
     }
 
     @Test
@@ -110,25 +108,23 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain)
-            .failWith(
-                argThat(
-                    new ArgumentMatcher<PolicyResult>() {
-                        @Override
-                        public boolean matches(PolicyResult result) {
-                            return (
-                                result.statusCode() == HttpStatusCode.BAD_REQUEST_400 &&
-                                RoleBasedAccessControlPolicy.RBAC_INVALID_USER_ROLES.equals(result.key())
-                            );
-                        }
+        verify(mockPolicychain).failWith(
+            argThat(
+                new ArgumentMatcher<PolicyResult>() {
+                    @Override
+                    public boolean matches(PolicyResult result) {
+                        return (
+                            result.statusCode() == HttpStatusCode.BAD_REQUEST_400 &&
+                            RoleBasedAccessControlPolicy.RBAC_INVALID_USER_ROLES.equals(result.key())
+                        );
                     }
-                )
-            );
+                }
+            )
+        );
     }
 
     @Test
@@ -144,8 +140,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -165,8 +160,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -186,25 +180,23 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain)
-            .failWith(
-                argThat(
-                    new ArgumentMatcher<PolicyResult>() {
-                        @Override
-                        public boolean matches(PolicyResult result) {
-                            return (
-                                result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
-                                RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key())
-                            );
-                        }
+        verify(mockPolicychain).failWith(
+            argThat(
+                new ArgumentMatcher<PolicyResult>() {
+                    @Override
+                    public boolean matches(PolicyResult result) {
+                        return (
+                            result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
+                            RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key())
+                        );
                     }
-                )
-            );
+                }
+            )
+        );
     }
 
     @Test
@@ -220,8 +212,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
@@ -241,25 +232,23 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
+        ).thenReturn(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE);
 
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
 
-        verify(mockPolicychain)
-            .failWith(
-                argThat(
-                    new ArgumentMatcher<PolicyResult>() {
-                        @Override
-                        public boolean matches(PolicyResult result) {
-                            return (
-                                result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
-                                RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key())
-                            );
-                        }
+        verify(mockPolicychain).failWith(
+            argThat(
+                new ArgumentMatcher<PolicyResult>() {
+                    @Override
+                    public boolean matches(PolicyResult result) {
+                        return (
+                            result.statusCode() == HttpStatusCode.FORBIDDEN_403 &&
+                            RoleBasedAccessControlPolicy.RBAC_FORBIDDEN.equals(result.key())
+                        );
                     }
-                )
-            );
+                }
+            )
+        );
     }
 
     private static final String GATEWAY_CONTEXT_ATTRIBUTE_ROLES = "gateway.roles";
@@ -273,8 +262,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        ).thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
         when(policyConfiguration.hasRoles()).thenReturn(true);
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
@@ -292,8 +280,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        ).thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
         when(policyConfiguration.hasRoles()).thenReturn(true);
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
@@ -311,8 +298,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        ).thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
         when(policyConfiguration.hasRoles()).thenReturn(true);
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
@@ -324,8 +310,9 @@ public class RoleBasedAccessControlPolicyTest {
     @Test
     public void testOnRequestNoRole_customRoleAttribute() throws Exception {
         when(mockExecutionContext.getAttribute(GATEWAY_CONTEXT_ATTRIBUTE_ROLES)).thenReturn(null);
-        when(environment.getProperty(eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY), anyString()))
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        when(environment.getProperty(eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY), anyString())).thenReturn(
+            GATEWAY_CONTEXT_ATTRIBUTE_ROLES
+        );
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
         policy.onRequest(mockRequest, mockResponse, mockExecutionContext, mockPolicychain);
@@ -341,8 +328,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        ).thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
         when(policyConfiguration.hasRoles()).thenReturn(true);
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
@@ -360,8 +346,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        ).thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
         when(policyConfiguration.hasRoles()).thenReturn(true);
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
@@ -379,8 +364,7 @@ public class RoleBasedAccessControlPolicyTest {
                 eq(RoleBasedAccessControlPolicy.RBAC_USER_ROLES_ATTRIBUTE_KEY),
                 eq(RoleBasedAccessControlPolicy.DEFAULT_RBAC_USER_ROLES_ATTRIBUTE)
             )
-        )
-            .thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
+        ).thenReturn(GATEWAY_CONTEXT_ATTRIBUTE_ROLES);
         when(policyConfiguration.hasRoles()).thenReturn(true);
 
         RoleBasedAccessControlPolicy policy = new RoleBasedAccessControlPolicy(policyConfiguration);
