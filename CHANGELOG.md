@@ -1,3 +1,20 @@
+# [2.0.0](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.4.0...2.0.0) (2025-12-11)
+
+
+### chore
+
+* depends on apim BOM ([2cdf1dc](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/commit/2cdf1dcd46b9a3cc382321cf2e6891d9649abc17))
+
+
+### Features
+
+* enable for LLM & MCP Proxy API ([d1b8791](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/commit/d1b87919352b6b1b45a7c75e65b37125dd231fb2))
+
+
+### BREAKING CHANGES
+
+* requires APIM 4.6+
+
 # [2.0.0-alpha.1](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.4.0...2.0.0-alpha.1) (2025-11-12)
 
 
