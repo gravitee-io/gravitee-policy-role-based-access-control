@@ -36,6 +36,7 @@ The roles are checked against request attribute `gravitee.attribute.user.roles`.
 |===
 | Plugin version | APIM version
 | 1.x            | All supported versions
+| 2.x            | 4.6.0 to latest
 |===
 
 == Configuration
