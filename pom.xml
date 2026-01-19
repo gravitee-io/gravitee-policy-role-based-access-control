@@ -34,7 +34,7 @@
     </parent>
 
     <properties>
-        <gravitee-apim-bom.version>4.10.0</gravitee-apim-bom.version>
+        <gravitee-apim-bom.version>4.10.1</gravitee-apim-bom.version>
 
         <!-- Property used by the publication job in CI-->
         <publish-folder-path>graviteeio-apim/plugins/policies</publish-folder-path>
