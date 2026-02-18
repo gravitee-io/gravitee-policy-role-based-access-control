@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/2.0.0...2.1.0) (2026-02-18)
+
+
+### Features
+
+* enable for A2A proxy ([d74311a](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/commit/d74311a8e3b05c103aca9831cb386fe053e9fe4f))
+
 # [2.0.0](https://github.com/gravitee-io/gravitee-policy-role-based-access-control/compare/1.4.0...2.0.0) (2025-12-11)
 
 
